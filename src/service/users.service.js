@@ -5,15 +5,24 @@ const bcrypt = require("bcrypt");
 
 class UsersService {
   async register(email, password) {
-    const data = await supabaseService.findOne("users", "email", email);
-    if (data.count) {
-      throw new Error("User Already registered");
+    const { data } = await supabaseService.findOne("users", "email", email);
+
+    if (data && data.length > 0) {
+      throw new Error(`User ${email} already registered`);
     }
+
     const passwordHash = await bcrypt.hash(password, 5);
     const user = await supabaseService.insertOne("users", [
       { email, passwordHash },
     ]);
-    loggerMiddleware.info(JSON.stringify(user));
+
+    if (user.error) {
+      loggerMiddleware.error("Problem with DB");
+      throw new Error("Problem with DB");
+    }
+
+    loggerMiddleware.info(`Email: ${email} - registered`);
+    return user;
   }
 }
 

@@ -5,7 +5,7 @@ class ErrorController {
   }
 
   BadRequest(req, res, message) {
-    res.writeHead(401, { "Content-type": "application/json" });
+    res.writeHead(400, { "Content-type": "application/json" });
     res.end(JSON.stringify({ data: message || "hello, page not found" }));
   }
 }

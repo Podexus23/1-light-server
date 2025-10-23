@@ -1,17 +1,21 @@
 const parseBodyHelper = require("../helpers/parseBody.helper");
 const usersService = require("../service/users.service");
+const errorController = require("./error.controller");
 
 class UsersController {
   async register(req, res) {
     //get data
-    const { email, password } = await parseBodyHelper(req);
-    const user = await usersService.register(email, password);
-    //check that there is no suh users
-    //hash password
-    //send data to DB
+    try {
+      const { email, password } = await parseBodyHelper(req);
+      await usersService.register(email, password);
 
-    res.writeHead(200, { "Content-type": "application/json" });
-    res.end(JSON.stringify({ data: "Hello from register" }));
+      res.writeHead(200, { "Content-type": "application/json" });
+      res.end(
+        JSON.stringify({ data: `User: ${email} - created successfully` })
+      );
+    } catch (error) {
+      errorController.BadRequest(req, res, error.message);
+    }
   }
   login(req, res) {}
   logout(req, res) {}
