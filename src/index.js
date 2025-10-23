@@ -5,25 +5,26 @@ const SupabaseService = require("./service/supabase.service");
 
 const PORT = 5000;
 
-const lighter = new LightService();
-lighter.startGenerateLight();
+LightService.startGenerateLight();
 
-const app = http.createServer((req, res) => {
+const app = http.createServer(async (req, res) => {
   if (req.url === "/api/light") {
     res.writeHead(200, { "Content-type": "application/json" });
-    res.end(JSON.stringify({ data: { light: lighter.getLight() } }));
+    res.end(JSON.stringify({ data: { light: LightService.getLight() } }));
+  } else if (req.url === "/api/light/send") {
+    const data = await SupabaseService.sendLight(LightService.getLight());
+    res.writeHead(200, { "Content-type": "application/json" });
+    res.end(JSON.stringify({ data }));
+  } else if (req.url === "/api/light/check") {
+    const data = await SupabaseService.getLastLight();
+    res.writeHead(200, { "Content-type": "application/json" });
+    res.end(JSON.stringify({ data }));
   } else {
     res.writeHead(200, { "Content-type": "application/json" });
     res.end(JSON.stringify({ data: "hello" }));
   }
 });
 
-async function appStart() {
-  app.listen(PORT, () => {
-    console.log(`Server is working on localhost:${PORT}`);
-  });
-  let lastOne = await SupabaseService.getLastLight();
-  console.log(lastOne);
-}
-
-appStart();
+app.listen(PORT, () => {
+  console.log(`Server is working on localhost:${PORT}`);
+});

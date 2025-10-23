@@ -11,6 +11,14 @@ class SupabaseService {
     const { data, error } = await this.base.from("light").select("*");
     return data.at(-1);
   }
+
+  async sendLight(quantity) {
+    const { data, error } = await this.base
+      .from("light")
+      .insert([{ quantity }])
+      .select();
+    return { data, error };
+  }
 }
 
 module.exports = new SupabaseService();

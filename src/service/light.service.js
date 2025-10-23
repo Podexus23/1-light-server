@@ -1,4 +1,4 @@
-module.exports = class LightService {
+class LightService {
   light = 0;
   generator;
   speed = 1000;
@@ -22,3 +22,5 @@ module.exports = class LightService {
     clearInterval(this.generator);
   }
 };
+
+module.exports = new LightService();
