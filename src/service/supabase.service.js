@@ -19,6 +19,19 @@ class SupabaseService {
       .select();
     return { data, error };
   }
+
+  async findOne(table, column, value) {
+    const data = await this.base.from(table).select("*").eq(column, value);
+    return data;
+  }
+
+  async insertOne(table, values) {
+    const { data, error } = await this.base
+      .from(table)
+      .insert([...values])
+      .select();
+    return { data, error };
+  }
 }
 
 module.exports = new SupabaseService();

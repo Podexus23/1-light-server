@@ -1,13 +1,13 @@
 class Logger {
-  warn() {
+  warn(text) {
     //yellow
     console.log("\x1b[33m%s\x1b[0m", `WARN: ${text}`);
   }
-  error() {
+  error(text) {
     //red
     console.log("\x1b[31m%s\x1b[0m", `ERROR: ${text}`);
   }
-  info() {
+  info(text) {
     //green
     console.log("\x1b[32m%s\x1b[0m", `INFO: ${text}`);
   }
