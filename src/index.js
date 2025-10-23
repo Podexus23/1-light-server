@@ -3,7 +3,7 @@ const http = require("http");
 const LightService = require("./service/light.service");
 const SupabaseService = require("./service/supabase.service");
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5050;
 
 LightService.startGenerateLight();
 
